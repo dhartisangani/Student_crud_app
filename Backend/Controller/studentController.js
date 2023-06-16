@@ -2,12 +2,12 @@ const Students = require('../modals/Students');
 const { validationResult } = require('express-validator');
 const { ObjectId } = require('mongodb');
 const studentvalidator = require('../Validator/studentvalidator');
+const multer = require('multer');
 
-// Add Student Validation 
+
 exports.addstudent = async (req, res) => {
     try {
         const {
-            imgUrl,
             studentid,
             fullname,
             birthdate,
@@ -27,7 +27,7 @@ exports.addstudent = async (req, res) => {
         }
 
         const studentData = {
-            imgUrl,
+            imgUrl: req.file,
             studentid,
             fullname,
             birthdate,
@@ -54,6 +54,7 @@ exports.addstudent = async (req, res) => {
         res.status(500).send('Internal server error...');
     }
 };
+
 
 // Get Student data by  _Id  
 exports.getStudentByID = async (req, res) => {
@@ -174,7 +175,7 @@ exports.getStudentWithSerchandPagination = async (req, res) => {
 // Get all Student data 
 exports.getAllStudents = async (req, res) => {
     try {
-        const id = req.body 
+        const id = req.body
         const student = await Students.find(id);
         res.send(student);
     } catch (error) {

@@ -2,7 +2,7 @@ export interface AddnewStudent {
   studentid: String;
   imgUrl: String;
   fullname: String;
-  birthdate: Number;
+  birthdate: String;
   gender: String;
   standard: String;
   fathername: String;

@@ -4,14 +4,17 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { AddnewStudent } from "../../Types/Type";
 import StudentForm from "../../Common/Student/StudentForm";
+import instance from "../../Services/AxiosInterCeptors";
+import { API_BASE_URL, UPDATE_STUDENT } from "../../Configs/AppConfig";
 
 const EditStudent = () => {
   const [loading, setLoading] = useState(false);
+  const { _id } = useParams<{ _id: string }>();
   const [studentData, setStudentData] = useState<AddnewStudent>({
     studentid: "",
     imgUrl: "",
     fullname: "",
-    birthdate: 0,
+    birthdate: "",
     gender: "",
     standard: "",
     fathername: "",
@@ -21,26 +24,29 @@ const EditStudent = () => {
     phone: 0,
     nationality: "",
   });
-  const { studentId } = useParams();
   const navigate = useNavigate();
+
   useEffect(() => {
     const fetchStudentData = async () => {
-      // Fetch the student data using the studentId
-      // Set the retrieved data into studentData state
+      try {
+        const response = await instance.get(`${API_BASE_URL}/${_id}`);
+        const json = await response.data;
+        setStudentData(json);
+      } catch (error) {
+        console.error("eroor");
+      }
     };
 
     fetchStudentData();
-  }, [studentId]);
+  }, [_id]);
 
   const handleSubmit = async (values: AddnewStudent) => {
     const token = localStorage.getItem("token");
+    setLoading(true);
     try {
-      const response = await axios.post(
-        "http://localhost:8080/api/v1/school/student/edit",
-        {
-          studentId,
-          ...values,
-        },
+      const response = await axios.put(
+        `${UPDATE_STUDENT}${_id}`,
+        values,
         {
           headers: {
             "Content-Type": "application/json",
@@ -57,6 +63,7 @@ const EditStudent = () => {
       navigate("/");
     } catch (error) {
       console.error(error);
+      setLoading(false);
     }
   };
 

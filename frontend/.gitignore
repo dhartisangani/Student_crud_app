@@ -1,5 +1,4 @@
 src/Configs/EnvironmentConfig.ts
-src/Component/Students/AddStudents.tsx
 /node_modules
 .env.local
 .env.development.local

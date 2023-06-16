@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Grid, TextField, Button } from "@mui/material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -12,7 +12,6 @@ interface StudentFormProps {
 
 const validationSchema = Yup.object().shape({
   studentid: Yup.string().required("Student ID is required"),
-  imgUrl: Yup.string().required("Student Image URL is required"),
   fullname: Yup.string().required("Full Name is required"),
   birthdate: Yup.string().required("Date of Birth is required"),
   gender: Yup.string().required("Gender is required"),
@@ -39,14 +38,30 @@ const StudentForm: React.FC<StudentFormProps> = ({
   initialValues,
   onSubmit,
 }) => {
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+    console.log(file);
+  };
+
   const formik = useFormik({
     initialValues,
     validationSchema,
     onSubmit,
   });
+  // enctype="multipart/form-data"
+  // <form onSubmit={formik.handleSubmit} encType="multipart/form-data">
 
   return (
-    <form onSubmit={formik.handleSubmit}>
+    <form onSubmit={formik.handleSubmit} encType="multipart/form-data">
       <Grid container spacing={1} mb={5} mt={2} justifyContent="center">
         <Grid item xs={12} sm={6}>
           <TextField
@@ -68,17 +83,25 @@ const StudentForm: React.FC<StudentFormProps> = ({
             }
           />
         </Grid>
-        <Grid item xs={12} sm={6}>
+        <Grid
+          item
+          xs={12}
+          sm={6}
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-around",
+            alignItems: "center",
+          }}
+        >
           <TextField
-            fullWidth
             variant="outlined"
             size="small"
             margin="dense"
-            label="Student Image"
             name="imgUrl"
-            type="text"
-            value={formik.values.imgUrl}
-            onChange={formik.handleChange}
+            type="file"
+            // value={formik.values.imgUrl}
+            onChange={handleFileChange}
             onBlur={formik.handleBlur}
             error={!!(formik.touched.imgUrl && formik.errors.imgUrl)}
             helperText={
@@ -87,7 +110,15 @@ const StudentForm: React.FC<StudentFormProps> = ({
                 : ""
             }
           />
+          {imagePreview && (
+            <img
+              src={imagePreview}
+              alt="Preview"
+              style={{ maxWidth: "7%", marginTop: 10 }}
+            />
+          )}
         </Grid>
+
         <Grid item xs={12} sm={8}>
           <TextField
             fullWidth

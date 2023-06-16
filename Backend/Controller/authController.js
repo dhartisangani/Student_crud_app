@@ -77,7 +77,7 @@ exports.login = async (req, res, next) => {
                 email: user.email
             }
         }
-        const expirationTime = 4 * 60 * 60; // 4 hours in seconds
+        const expirationTime =  1 * 60; // 4 hours in seconds
         const authtoken = jwt.sign(data, JWT_SECRET, { expiresIn: expirationTime });
         let success = true
         res.json({ success, data, authtoken, expirationTime })

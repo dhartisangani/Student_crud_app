@@ -12,11 +12,15 @@ import {
 } from "@material-ui/core";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import { Grid, Typography, InputBase } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { useCallback, useEffect, useState } from "react";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import instance from "../../Services/AxiosInterCeptors";
-import { ALL_STUDENTS, DELETE_STUDENT } from "../../Configs/AppConfig";
+import {
+  ALL_STUDENTS,
+  API_BASE_URL,
+  DELETE_STUDENT,
+} from "../../Configs/AppConfig";
 import { AllStudent } from "../../Types/Type";
 import StudentTable from "../../Common/Student/StudentTable";
 
@@ -105,7 +109,7 @@ const AllStudents = () => {
       let response;
       if (searchValue) {
         response = await instance.get(
-          `${ALL_STUDENTS}?search=${searchValue}&page=${page}&limit=${limit}`
+          `${API_BASE_URL}?search=${searchValue}&page=${page}&limit=${limit}`
         );
       } else {
         response = await fetchProducts(searchValue, 1, limit);
@@ -138,8 +142,14 @@ const AllStudents = () => {
     limit: number
   ) => {
     try {
+      const token = localStorage.getItem("token");
       const response = await instance.get(
-        `${ALL_STUDENTS}?search=${searchValue}&page=${page}&limit=${limit}`
+        `${API_BASE_URL}?search=${searchValue}&page=${page}&limit=${limit}`,
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
       );
       const data = await response.data;
       setProducts(data.products);
@@ -147,6 +157,9 @@ const AllStudents = () => {
       setTotalPages(data.total_pages);
       setTotalProduct(data.total_products);
       setIsLoading(false);
+      if (data.data == "Token has expired. Please authenticate again") {
+        alert("Token Expired");
+      }
     } catch (error) {
       console.error("Error fetching products:", error);
     }

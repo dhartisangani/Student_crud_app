@@ -72,7 +72,7 @@ function Navbar() {
   };
   const logOutHandler = async () => {
     localStorage.removeItem("token");
-    navigate("/login");
+    navigate("/signin");
   };
 
   return (
@@ -136,6 +136,8 @@ function Navbar() {
 
             <Grid item md={1} sm={2}>
               <div>
+                {
+                  localStorage.getItem("token")?
                 <Link
                   to="/signin"
                   onClick={logOutHandler}
@@ -148,6 +150,20 @@ function Navbar() {
                 >
                   Log out
                 </Link>
+                :
+                <Link
+                  to="/signin"
+                  style={{
+                    color: "white",
+                    background: "primary.main",
+                    fontSize: "18px",
+                    textDecoration: "none",
+                  }}
+                >
+                 Sign In
+                </Link>
+                }
+
               </div>
             </Grid>
           </Grid>

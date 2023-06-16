@@ -8,7 +8,7 @@ const StudentSchema = new mongoose.Schema({
 
     imgUrl: {
         type: String,
-        required: true
+        // required: true
     },
     studentid: {
         type: String,
@@ -19,7 +19,7 @@ const StudentSchema = new mongoose.Schema({
         required: true
     }, 
     birthdate: {
-        type: Date,
+        type: String,
         required: true
     },
     gender: {
