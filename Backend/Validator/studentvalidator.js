@@ -28,6 +28,11 @@ module.exports = function studentValidator(data) {
         errors.fullname = "Full name field is required";
     }
 
+    // Validate imgUrl
+    if (!data.imgUrl) {
+        errors.imgUrl = "Image file is required";
+    }
+
     // Validate birthdate
     if (validator.isEmpty(data.birthdate)) {
         errors.birthdate = "Birthdate field is required";

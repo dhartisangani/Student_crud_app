@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import DeleteIcon from "@material-ui/icons/Delete";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import { CardMedia } from "@mui/material";
+
 export interface AllStudentList {
   item: {
     _id: string;
@@ -32,17 +34,18 @@ const StudentTable: React.FC<AllStudentList> = ({ item, srNo, onDelete }) => {
       <TableRow>
         <TableCell>{srNo}</TableCell>
         <TableCell>{item.studentid}</TableCell>
-        {/* <TableCell>
-            <CardMedia
-              image={item.imgUrl}
-              sx={{
-                backgroundSize: "contain",
-                objectFit: "contain",
-                height: "50px",
-                width: "50px",
-              }}
-            />
-          </TableCell> */}
+        <TableCell>
+          <CardMedia
+            component="img"
+            image={`../Backend/images${item.imgUrl.toString()}`}
+            sx={{
+              backgroundSize: "contain",
+              objectFit: "contain",
+              height: "50px",
+              width: "50px",
+            }}
+          />
+        </TableCell>
 
         <TableCell>{item.imgUrl}</TableCell>
         <TableCell>{item.fullname}</TableCell>
