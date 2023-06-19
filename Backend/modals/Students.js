@@ -8,7 +8,7 @@ const StudentSchema = new mongoose.Schema({
 
     imgUrl: {
         type: String,
-        // required: true
+        required: true
     },
     studentid: {
         type: String,

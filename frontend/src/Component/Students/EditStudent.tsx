@@ -40,17 +40,24 @@ const EditStudent = () => {
     fetchStudentData();
   }, [_id]);
 
-  const handleSubmit = async (values: AddnewStudent) => {
+  const handleSubmit = async (values: any) => {
     const token = localStorage.getItem("token");
-    setLoading(true);
+    const formData = new FormData();
+    console.log(values);
+
+    // Append form values to the FormData object
+    for (const key in values) {
+      formData.append(key, values[key]);
+    }
+
     try {
       const response = await axios.put(
-        `${UPDATE_STUDENT}${_id}`,
-        values,
+        `http://localhost:8080/api/v1/school/student/update/${_id}`,
+        formData,
         {
           headers: {
-            "Content-Type": "application/json",
             Authorization: token,
+            "Content-Type": "multipart/form-data",
           },
         }
       );
@@ -63,10 +70,8 @@ const EditStudent = () => {
       navigate("/");
     } catch (error) {
       console.error(error);
-      setLoading(false);
     }
   };
-
   return (
     <Grid container spacing={1} mb={5} mt={5}>
       <Grid item xs={12} md={12} sm={12} m={5} justifyContent={"center"}>

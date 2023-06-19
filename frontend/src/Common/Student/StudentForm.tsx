@@ -19,6 +19,15 @@ const validationSchema = Yup.object().shape({
   fathername: Yup.string().required("Father's Name is required"),
   Fatheroccupation: Yup.string().required("Father's Occupation is required"),
   mothername: Yup.string().required("Mother's Name is required"),
+  // imgUrl: Yup.string().test(
+  //   "FILE_FORMAT",
+  //   "Only JPG and PNG image formats are allowed",
+  //   (value: any) =>
+  //     !value ||
+  //     (value &&
+  //       /\.(jpg|jpeg|png)$/i.test(value) &&
+  //       ["image/jpeg", "image/png"].includes(value.type))
+  // ),
   email: Yup.string()
     .email("Invalid email")
     .required("Email is required")
@@ -45,6 +54,7 @@ const StudentForm: React.FC<StudentFormProps> = ({
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
+        formik.setFieldValue("imgUrl", file);
         setImagePreview(reader.result as string);
       };
       reader.readAsDataURL(file);
@@ -57,8 +67,6 @@ const StudentForm: React.FC<StudentFormProps> = ({
     validationSchema,
     onSubmit,
   });
-  // enctype="multipart/form-data"
-  // <form onSubmit={formik.handleSubmit} encType="multipart/form-data">
 
   return (
     <form onSubmit={formik.handleSubmit} encType="multipart/form-data">
@@ -83,32 +91,12 @@ const StudentForm: React.FC<StudentFormProps> = ({
             }
           />
         </Grid>
-        <Grid
-          item
-          xs={12}
-          sm={6}
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-around",
-            alignItems: "center",
-          }}
-        >
-          <TextField
-            variant="outlined"
-            size="small"
-            margin="dense"
+        <Grid item xs={12} sm={6}>
+          <input
             name="imgUrl"
             type="file"
-            // value={formik.values.imgUrl}
             onChange={handleFileChange}
             onBlur={formik.handleBlur}
-            error={!!(formik.touched.imgUrl && formik.errors.imgUrl)}
-            helperText={
-              formik.touched.imgUrl && formik.errors.imgUrl
-                ? String(formik.errors.imgUrl)
-                : ""
-            }
           />
           {imagePreview && (
             <img
@@ -145,7 +133,6 @@ const StudentForm: React.FC<StudentFormProps> = ({
             variant="outlined"
             margin="dense"
             size="small"
-            // label="Date of Birth"
             name="birthdate"
             type="date"
             value={formik.values.birthdate}

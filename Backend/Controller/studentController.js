@@ -6,6 +6,8 @@ const multer = require('multer');
 
 
 exports.addstudent = async (req, res) => {
+    console.log(req.body)
+    console.log("-------------------------->", req.file)
     try {
         const {
             studentid,
@@ -27,7 +29,7 @@ exports.addstudent = async (req, res) => {
         }
 
         const studentData = {
-            imgUrl: req.file,
+            imgUrl: req.file.filename,
             studentid,
             fullname,
             birthdate,
@@ -44,6 +46,8 @@ exports.addstudent = async (req, res) => {
         const { errors, isValid } = studentvalidator(studentData);
         if (!isValid) {
             return res.status(400).json({ errors });
+            next(err) // Pass error to Express
+
         }
 
         const student = await Students.create(studentData);
@@ -74,8 +78,9 @@ exports.getStudentByID = async (req, res) => {
 
 // Update Student data 
 exports.updateStudentwithID = async (req, res) => {
+    console.log(req.body)
+    console.log("updated image", req.file)
     const {
-        imgUrl,
         studentid,
         fullname,
         birthdate,
@@ -88,6 +93,8 @@ exports.updateStudentwithID = async (req, res) => {
         phone,
         nationality,
     } = req.body
+
+    const {imgUrl} = req.file.filename
     let student = await Students.findById(req.params.id)
     try {
         const updatestudent = {}

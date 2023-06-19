@@ -1,16 +1,20 @@
 const express = require('express')
 const router = express.Router();
 const User = require('../modals/User')
-const fetchuser = require('../middleWare/fetchuser');
+const fetchuser = require('../middleWare/authToken');
 const { signup, login, forgotPassword } = require('../Controller/authController');
+const user = process.env.BASE_URI_USER
+const userSignup = process.env.USER_SIGNUP
+const userSignin = process.env.USER_SIGNIN
+const userforgotPassword = process.env.USER_RESET_PASSWORD
 
 // create new user
-router.post('/signup', signup)
+router.post(userSignup, signup)
 
 //login 
-router.post('/signin', login)
-//forgot password 
+router.post(userSignin, login)
 
-router.put('/setpwd', forgotPassword)
+//forgot password 
+router.put(userforgotPassword, forgotPassword)
 
 module.exports = router

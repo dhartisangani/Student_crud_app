@@ -1,52 +1,33 @@
 const express = require('express');
-const fetchuser = require('../middleWare/fetchuser');
 const router = express.Router();
-const multer = require('multer');
 const { addstudent, getAllStudents, getStudentByID, getStudentWithSerchandPagination, updateStudentwithID, deleteStudent } = require('../Controller/studentController');
-;
-const imgconfig = multer.diskStorage({
-    destination: (req, file, callback) => {
-        callback(null, "./images")
-    },
-    filename: (req, file, callback) => {
-        callback(null, `imgae-${Date.now()}. ${file.originalname}`)
-    }
-})
-
-
-// img filter
-const isImage = (req, file, callback) => {
-    if (file.mimetype.startsWith("image")) {
-        callback(null, true)
-    } else {
-        callback(new Error("only images is allowd"))
-    }
-}
-
-const upload = multer({
-    storage: imgconfig,
-    fileFilter: isImage
-});
+const authToken = require('../middleWare/authToken');
+const uploadImage = require('../middleWare/uploadImage');
+const StudentAdd = process.env.ADD_STUDENT
+const StudentEdit = process.env.UPDATE_STUDENT
+const StudentDelete = process.env.DELETE_STUDENT
+const StudentAll = process.env.GET_ALL_STUDENT
+const StudentWithId = process.env.GET_STUDENT_WITH_ID
+const StudentwithPagination = process.env.GET_STUDENT_WITH_PAGINATION
 
 // Add Student
-// const upload = multer({ storage: storage });
-
-router.post('/add', fetchuser, upload.single('imgUrl'), addstudent);
-
-// Get StudentList 
-router.get('/getstudents', fetchuser,getAllStudents)
-
-// Get Student data with  _ID 
-router.get('/:id',fetchuser, getStudentByID);
-
-// Get Student with Search and Pagination 
-router.get('',fetchuser, getStudentWithSerchandPagination);
-// http://localhost:8080/api/student/all?search=$"'&page=$1&limit=$1
+router.post(StudentAdd, uploadImage, authToken, addstudent);
 
 // Update Student with ID 
-router.put('/update/:id', fetchuser, updateStudentwithID)
+router.put(StudentEdit, uploadImage, authToken, updateStudentwithID)
 
 // Delete Student 
-router.delete('/delete/:id', fetchuser, deleteStudent)
+router.delete(StudentDelete, authToken, deleteStudent)
+
+// Get All StudentList 
+router.get(StudentAll, authToken, getAllStudents)
+
+// Get single Student data with  _ID 
+router.get(StudentWithId, authToken, getStudentByID);
+
+// Get Student with Search and Pagination 
+// http://localhost:8080/api/student/all?search=$"'&page=$1&limit=$1
+router.get(StudentwithPagination, authToken, getStudentWithSerchandPagination);
+
 
 module.exports = router
