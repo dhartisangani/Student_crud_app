@@ -26,7 +26,7 @@ const validationSchema = Yup.object().shape({
   //     !value ||
   //     (value &&
   //       /\.(jpg|jpeg|png)$/i.test(value) &&
-  //       ["image/jpeg", "image/png"].includes(value.type))
+  //       ["/jpeg", "/png"].includes(value.type))
   // ),
   email: Yup.string()
     .email("Invalid email")
@@ -50,7 +50,7 @@ const StudentForm: React.FC<StudentFormProps> = ({
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
+    const file = event.target.files && event.target.files[0];
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -91,12 +91,27 @@ const StudentForm: React.FC<StudentFormProps> = ({
             }
           />
         </Grid>
-        <Grid item xs={12} sm={6}>
-          <input
+
+        <Grid
+          item
+          xs={12}
+          sm={6}
+          style={{ display: "flex", justifyContent: "space-around", alignItems:'center' }}
+        >
+          <TextField
             name="imgUrl"
             type="file"
+            size="small"
+            margin="dense"
+            variant="standard"
             onChange={handleFileChange}
             onBlur={formik.handleBlur}
+            error={!!(formik.touched.imgUrl && formik.errors.imgUrl)}
+            helperText={
+              formik.touched.imgUrl && formik.errors.imgUrl
+                ? String(formik.errors.imgUrl)
+                : ""
+            }
           />
           {imagePreview && (
             <img

@@ -12,7 +12,7 @@ import {
 } from "@material-ui/core";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import { Grid, Typography, InputBase } from "@mui/material";
-import { Link, Navigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useCallback, useEffect, useState } from "react";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import instance from "../../Services/AxiosInterCeptors";
@@ -82,13 +82,14 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 const AllStudents = () => {
-  const [products, setProducts] = useState<AllStudent[]>([]);
+  const [students, setStudents] = useState<AllStudent[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [totalProduct, setTotalProduct] = useState(1);
+  const [totalStudent, setTotalStudent] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [searchValue, setSearchValue] = useState<string>("");
+  const navigate = useNavigate();
   const classes = useStyles();
 
   const debounce = (func: Function, delay: number) => {
@@ -112,15 +113,15 @@ const AllStudents = () => {
           `${API_BASE_URL}?search=${searchValue}&page=${page}&limit=${limit}`
         );
       } else {
-        response = await fetchProducts(searchValue, 1, limit);
+        response = await fethStudents(searchValue, 1, limit);
       }
 
       if (response) {
         const data = await response.data;
-        setProducts(data.products);
+        setStudents(data.students);
         setCurrentPage(data.current_page);
         setTotalPages(data.total_pages);
-        setTotalProduct(data.total_products);
+        setTotalStudent(data.total_students);
         setIsLoading(false);
       }
     } catch (error) {
@@ -135,14 +136,16 @@ const AllStudents = () => {
   };
 
   const debouncedHandleSearch = useCallback(debounce(handleSearch, 1000), []);
-
-  const fetchProducts = async (
+  const fethStudents = async (
     searchValue: String,
     page: number,
     limit: number
   ) => {
     try {
+      // Retrieve the token from local storage
       const token = localStorage.getItem("token");
+
+      // Send a GET request to the API endpoint with search parameters
       const response = await instance.get(
         `${API_BASE_URL}?search=${searchValue}&page=${page}&limit=${limit}`,
         {
@@ -151,29 +154,29 @@ const AllStudents = () => {
           },
         }
       );
+      // Extract the data from the response
       const data = await response.data;
-      setProducts(data.products);
+
+      // Update the state variables with the received data
+      setStudents(data.students);
       setCurrentPage(data.current_page);
       setTotalPages(data.total_pages);
-      setTotalProduct(data.total_products);
+      setTotalStudent(data.total_students);
       setIsLoading(false);
-      if (data.data == "Token has expired. Please authenticate again") {
-        alert("Token Expired");
-      }
-    } catch (error) {
-      console.error("Error fetching products:", error);
+    } catch (error: any) {
+      console.error("Error fetching Student Data:", error);
     }
   };
 
   useEffect(() => {
-    fetchProducts(searchValue, 1, rowsPerPage);
+    fethStudents(searchValue, 1, rowsPerPage);
   }, []);
 
   const handlePageChange = (page: number) => {
     if (searchValue) {
       handleSearch(searchValue, page, rowsPerPage);
     } else {
-      fetchProducts(searchValue, page, rowsPerPage);
+      fethStudents(searchValue, page, rowsPerPage);
     }
   };
 
@@ -187,24 +190,24 @@ const AllStudents = () => {
     if (searchValue) {
       handleSearch(searchValue, 1, newRowsPerPage);
     } else {
-      fetchProducts(searchValue, 1, newRowsPerPage);
+      fethStudents(searchValue, 1, newRowsPerPage);
     }
   };
 
-  const handleDeleteProduct = async (productId: string) => {
+  const handleDeleteStudent = async (studentId: string) => {
     try {
       const token: string = localStorage.getItem("token") as string;
-      await instance.delete(`${DELETE_STUDENT}${productId}`, {
+      await instance.delete(`${DELETE_STUDENT}${studentId}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: token,
         },
       });
-      setProducts((prevProducts) =>
-        prevProducts.filter((product) => product._id !== productId)
+      setStudents((prevStudents) =>
+        prevStudents.filter((student) => student._id !== studentId)
       );
     } catch (error) {
-      console.error("Error deleting product:", error);
+      console.error("Error deleting student:", error);
     }
   };
 
@@ -257,7 +260,7 @@ const AllStudents = () => {
         <Grid item xs={12} md={12} sm={12} m={5} justifyContent={"center"}>
           <Card>
             <TableContainer>
-              {products?.length === 0 ? (
+              {students?.length === 0 ? (
                 <Typography variant={"h5"} align="center" m={5}>
                   No Students Data
                 </Typography>
@@ -270,9 +273,7 @@ const AllStudents = () => {
                         Student Id
                       </TableCell>
                       <TableCell className={classes.thead}>Image</TableCell>
-                      {/* <TableCell className={classes.thead}>
-                        Product SKU
-                      </TableCell> */}
+
                       <TableCell className={classes.thead}>
                         Student Name
                       </TableCell>
@@ -289,12 +290,12 @@ const AllStudents = () => {
                   </TableHead>
 
                   <TableBody>
-                    {products?.map((item: any, index: any) => (
+                    {students?.map((item: any, index: any) => (
                       <StudentTable
                         item={item}
                         key={index}
                         srNo={index + 1}
-                        onDelete={() => handleDeleteProduct(item._id)}
+                        onDelete={() => handleDeleteStudent(item._id)}
                       />
                     ))}
                   </TableBody>
@@ -305,7 +306,7 @@ const AllStudents = () => {
                           style={{ display: "flex", justifyContent: "center" }}
                           rowsPerPageOptions={[5, 10, 25]}
                           component="div"
-                          count={totalProduct}
+                          count={totalStudent}
                           rowsPerPage={rowsPerPage}
                           page={currentPage - 1}
                           onPageChange={(_, page) => handlePageChange(page + 1)}

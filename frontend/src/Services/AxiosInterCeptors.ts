@@ -8,9 +8,10 @@ export const axiosAuth = axios.create();
 const instance = axios.create({
   baseURL: API_BASE_URL,
 });
-instance.interceptors.response.use((response: any) => {
-  return response;
-});
+instance.interceptors.response.use(
+  (response: any) => response,
+  (error: any) => onResponseRejected(error, (error) => null)
+);
 
 instance.defaults.headers.common["Authorization"] = "Auth Token";
 axios.defaults.baseURL = API_BASE_URL;
@@ -22,6 +23,9 @@ const onResponseRejected = (error: any, handle401: (error: any) => void) => {
     const { response } = error;
     if (response.status === 401) {
       handle401(error);
+    } else if (response.status === 402) {
+      localStorage.removeItem("token");
+      localStorage.removeItem("tokenExpiration");
     } else if (response.status === 404) {
       message = "Not Found";
     } else if (response.status === 500) {

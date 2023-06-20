@@ -29,13 +29,35 @@ const EditStudent = () => {
   useEffect(() => {
     const fetchStudentData = async () => {
       try {
-        const response = await instance.get(`${API_BASE_URL}/${_id}`);
-        const json = await response.data;
-        setStudentData(json);
+        const token = localStorage.getItem("token");
+        const response = await instance.get(`${API_BASE_URL}/${_id}`, {
+          headers: {
+            Authorization: token,
+          },
+        });
+        const data = await response.data;
+        console.log(data);
+        // setStudentData(data);
+        // console.log("student data", studentData);
+        setStudentData({
+          studentid: data.studentid,
+          imgUrl: data.imgUrl,
+          fullname: data.fullname,
+          birthdate: data.birthdate,
+          gender: data.gender,
+          standard: data.standard,
+          fathername: data.fathername,
+          Fatheroccupation: data.Fatheroccupation,
+          mothername: data.mothername,
+          email: data.email,
+          phone: data.phone,
+          nationality: data.nationality,
+        });
       } catch (error) {
-        console.error("eroor");
+        console.error("error");
       }
     };
+    console.log("student data", studentData);
 
     fetchStudentData();
   }, [_id]);
@@ -51,20 +73,14 @@ const EditStudent = () => {
     }
 
     try {
-      const response = await axios.put(
-        `http://localhost:8080/api/v1/school/student/update/${_id}`,
-        formData,
-        {
-          headers: {
-            Authorization: token,
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      const response = await axios.put(`${UPDATE_STUDENT}${_id}`, formData, {
+        headers: {
+          Authorization: token,
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
       const data = response.data;
-      console.log(data);
-
       setLoading(false);
       console.log("Submitted form:", values);
       navigate("/");
@@ -72,6 +88,7 @@ const EditStudent = () => {
       console.error(error);
     }
   };
+
   return (
     <Grid container spacing={1} mb={5} mt={5}>
       <Grid item xs={12} md={12} sm={12} m={5} justifyContent={"center"}>

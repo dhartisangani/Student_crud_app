@@ -1,4 +1,4 @@
-import { Grid, Typography } from "@mui/material";
+import { Container, Grid, Typography } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { Card, CardMedia } from "@material-ui/core";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
@@ -63,13 +63,12 @@ function StudentData() {
   }, [data]);
 
   useEffect(() => {
-    const fetchProduct = async () => {
+    const fetchStudent = async () => {
       const token = localStorage.getItem("token");
 
       try {
         const response = await instance.get(`${API_BASE_URL}/${_id}`, {
           headers: {
-            // "Content-Type": "application/json",
             Authorization: token,
           },
         });
@@ -82,7 +81,7 @@ function StudentData() {
         console.error(error.message);
       }
     };
-    fetchProduct();
+    fetchStudent();
   }, [_id]);
 
   if (isLoading) {
@@ -94,49 +93,66 @@ function StudentData() {
   }
 
   return (
-    <div style={{ marginTop: "10%" }}>
+    <Container
+      style={{
+        marginTop: "10%",
+      }}
+    >
       <Typography variant="h4" gutterBottom align="center">
         Student Detail
       </Typography>
       {data && (
-        <Card>
-          <Grid container spacing={1} mb={5} className={classes.root}>
+        <Grid container spacing={1} mb={5} className={classes.root}>
+          
+          <Card
+            style={{
+              width: "50%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
             <Grid item xs={10} md={5} sm={4} mt={7} className={classes.imgGrid}>
-              <CardMedia
-                className={classes.image}
-                // image={data.item.imgUrl}
-                component="img"
+              <img
+                style={{ width: "100px", textAlign: "center", margin: "auto" }}
+                src={`/images/${data.imgUrl}`}
+                alt="Student Image"
+                className="mt-2"
               />
             </Grid>
-            <Grid item xs={10} md={5} sm={5} mt={7}>
-              <Typography variant="h4" mb={1}>
-                {data.fullname}
+            <Grid item xs={10} md={5} sm={5} mt={5}>
+              <Typography component="p" mb={1} fontWeight="bold">
+                FullName:- {data.fullname}
               </Typography>
               <Typography
                 variant="h4"
                 alignItems="center"
                 flexDirection="row"
                 display="flex"
-                gap={3}
-                mb={2}
               >
                 <Typography variant="body1">
-                  {data.birthdate} ratings
+                  Date of Birth:- {data.birthdate}
                 </Typography>
               </Typography>
-              <Typography variant="h5" fontWeight="bold" mb={1}>
-                {data.gender}
-              </Typography>
-              <Typography component="p" mb={1}>
-                Available Qty:{" "}
+              <Typography component="p">Gender:- {data.gender}</Typography>
+              <Typography component="p">
+                Admission Standard:
                 <span style={{ fontWeight: "bold" }}>{data.standard}</span>
               </Typography>
-              <Typography variant="body1">{data.fathername}</Typography>
+              <Typography variant="body1">
+                Father's Name:- {data.fathername}
+              </Typography>
+              <Typography variant="body1">
+                Mother's Name:- {data.mothername}
+              </Typography>
+              <Typography variant="body1">
+                Contact No:- {data.phone.toString()}
+              </Typography>
             </Grid>
-          </Grid>
-        </Card>
+          </Card>
+        </Grid>
       )}
-    </div>
+    </Container>
   );
 }
 

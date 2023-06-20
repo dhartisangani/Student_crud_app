@@ -21,7 +21,7 @@ const authToken = (req, res, next) => {
   }
 
   if (isTokenExpired(token)) {
-    return res.status(401).send({ error: "Token has expired. Please authenticate again." });
+    return res.status(402).send({ error: "Token has expired. Please authenticate again." });
   }
 
   try {

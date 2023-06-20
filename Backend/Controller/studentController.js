@@ -2,8 +2,6 @@ const Students = require('../modals/Students');
 const { validationResult } = require('express-validator');
 const { ObjectId } = require('mongodb');
 const studentvalidator = require('../Validator/studentvalidator');
-const multer = require('multer');
-
 
 exports.addstudent = async (req, res) => {
     console.log(req.body)
@@ -94,7 +92,7 @@ exports.updateStudentwithID = async (req, res) => {
         nationality,
     } = req.body
 
-    const {imgUrl} = req.file.filename
+    const imgUrl = req.file.filename
     let student = await Students.findById(req.params.id)
     try {
         const updatestudent = {}
@@ -159,18 +157,18 @@ exports.getStudentWithSerchandPagination = async (req, res) => {
             query = { $text: { $search: searchValue } };
         }
 
-        const productsCount = await Students.countDocuments(query);
-        const totalPages = Math.ceil(productsCount / limit);
+        const studentsCount = await Students.countDocuments(query);
+        const totalPages = Math.ceil(studentsCount / limit);
 
-        const products = await Students.find(query)
+        const students = await Students.find(query)
             .skip(startIndex)
             .limit(limit);
 
         const response = {
             total_pages: totalPages,
             current_page: page,
-            total_products: productsCount,
-            products: products,
+            total_students: studentsCount,
+            students: students,
         };
         res.send(response);
     } catch (error) {

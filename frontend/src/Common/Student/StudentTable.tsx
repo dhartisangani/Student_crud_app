@@ -1,11 +1,11 @@
-import { TableCell, TableRow } from "@material-ui/core";
+import { Card, TableCell, TableRow } from "@material-ui/core";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import DeleteIcon from "@material-ui/icons/Delete";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { CardMedia } from "@mui/material";
-
+import img from '../../../../Backend/images/image-imgUrl-1687258057656.jpeg'
 export interface AllStudentList {
   item: {
     _id: string;
@@ -37,7 +37,7 @@ const StudentTable: React.FC<AllStudentList> = ({ item, srNo, onDelete }) => {
         <TableCell>
           <CardMedia
             component="img"
-            image={`../Backend/images${item.imgUrl.toString()}`}
+            image={`./images${item.imgUrl}`}
             sx={{
               backgroundSize: "contain",
               objectFit: "contain",
@@ -45,6 +45,12 @@ const StudentTable: React.FC<AllStudentList> = ({ item, srNo, onDelete }) => {
               width: "50px",
             }}
           />
+          {/* <img
+            style={{ width: "100px", textAlign: "center", margin: "auto" }}
+            src={`${window.location.origin}/images/${item.imgUrl}`}
+            className="mt-2"
+            alt="Student Image"
+          /> */}
         </TableCell>
 
         <TableCell>{item.imgUrl}</TableCell>
