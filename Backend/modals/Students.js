@@ -17,7 +17,7 @@ const StudentSchema = new mongoose.Schema({
     fullname: {
         type: String,
         required: true
-    }, 
+    },
     birthdate: {
         type: String,
         required: true
@@ -25,6 +25,10 @@ const StudentSchema = new mongoose.Schema({
     gender: {
         type: String,
         required: true
+    },
+    division: {
+        type: String,
+        require: true
     },
     standard: {
         type: String,
@@ -73,6 +77,6 @@ module.exports = mongoose.model('student', StudentSchema)
 //     "Fatheroccupation": "business",
 //     "mothername": "bhavnaben g. varsani",
 //     "email": "dharti@123gmail.com",
-//     "phone": "9658321254", 
+//     "phone": "9658321254",
 //     "nationality": "indian"
 //   }

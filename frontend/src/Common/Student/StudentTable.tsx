@@ -16,6 +16,7 @@ export interface AllStudentList {
     birthdate: String;
     gender: String;
     standard: String;
+    division: string;
     fathername: String;
     Fatheroccupation: String;
     mothername: String;
@@ -49,6 +50,7 @@ const StudentTable: React.FC<AllStudentList> = ({ item, srNo, onDelete }) => {
         <TableCell>{item.fullname}</TableCell>
         <TableCell>{item.birthdate}</TableCell>
         <TableCell>{item.standard}</TableCell>
+        <TableCell>{item.division}</TableCell>
         <TableCell>{item.gender}</TableCell>
         <TableCell>{item.phone.toString()}</TableCell>
 

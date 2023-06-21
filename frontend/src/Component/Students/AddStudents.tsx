@@ -8,6 +8,7 @@ const AddStudent = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  // Add new student data
   const handleSubmit = async (values: any) => {
     const token = localStorage.getItem("token");
     const formData = new FormData();
@@ -45,6 +46,7 @@ const AddStudent = () => {
 
   const initialValues = {
     studentid: "",
+    division: "",
     imgUrl: "",
     fullname: "",
     birthdate: "",

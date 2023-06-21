@@ -3,15 +3,17 @@ const { validationResult } = require('express-validator');
 const { ObjectId } = require('mongodb');
 const studentvalidator = require('../Validator/studentvalidator');
 
+// add student function
 exports.addstudent = async (req, res) => {
     // console.log(req.body)
-    // console.log("-------------------------->", req.file)
+    console.log("-------------------------->", req.file)
     try {
         const {
             studentid,
             fullname,
             birthdate,
             gender,
+            division,
             standard,
             fathername,
             Fatheroccupation,
@@ -32,6 +34,7 @@ exports.addstudent = async (req, res) => {
             fullname,
             birthdate,
             gender,
+            division,
             standard,
             fathername,
             Fatheroccupation,
@@ -54,6 +57,22 @@ exports.addstudent = async (req, res) => {
     } catch (error) {
         console.error(error.message);
         res.status(500).send('Internal server error...');
+    }
+};
+
+// get students by division wise
+exports.getStudentsByDivision = async (req, res) => {
+    try {
+        const division = req.params.division;
+
+        const students = await Students.find({ division: division });
+        if (students.length === 0) {
+            return res.status(404).send('Students not found');
+        }
+        res.send(students);
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send("Internal server Error...");
     }
 };
 
@@ -83,6 +102,7 @@ exports.updateStudentwithID = async (req, res) => {
         fullname,
         birthdate,
         gender,
+        division,
         standard,
         fathername,
         Fatheroccupation,
@@ -101,6 +121,7 @@ exports.updateStudentwithID = async (req, res) => {
         if (fullname) { updatestudent.fullname = fullname }
         if (birthdate) { updatestudent.birthdate = birthdate }
         if (gender) { updatestudent.gender = gender }
+        if (division) { updatestudent.division = division }
         if (standard) { updatestudent.standard = standard }
         if (fathername) { updatestudent.fathername = fathername }
         if (Fatheroccupation) { updatestudent.Fatheroccupation = Fatheroccupation }
@@ -144,10 +165,10 @@ exports.deleteStudent = async (req, res) => {
 };
 
 // Get all Students data with pagination and serchvalue
-
 exports.getStudentWithSerchandPagination = async (req, res) => {
     try {
         const searchValue = req.query.search || '';
+        const division = req.query.division || '';
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 10;
         const startIndex = (page - 1) * limit;
@@ -157,6 +178,9 @@ exports.getStudentWithSerchandPagination = async (req, res) => {
             query = { $text: { $search: searchValue } };
         }
 
+        if (division) {
+            query.division = division;
+        }
         const studentsCount = await Students.countDocuments(query);
         const totalPages = Math.ceil(studentsCount / limit);
 

@@ -4,6 +4,8 @@ export interface AddnewStudent {
   fullname: String;
   birthdate: String;
   gender: String;
+  division: String;
+
   standard: String;
   fathername: String;
   Fatheroccupation: String;
@@ -19,6 +21,7 @@ export interface AllStudent {
   fullname: String;
   birthdate: String;
   gender: String;
+  division: String;
   standard: String;
   fathername: String;
   Fatheroccupation: String;

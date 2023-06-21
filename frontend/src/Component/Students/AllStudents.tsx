@@ -9,9 +9,18 @@ import {
   TablePagination,
   TableFooter,
   Button,
+  InputLabel,
+  Select,
 } from "@material-ui/core";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
-import { Grid, Typography, InputBase } from "@mui/material";
+import {
+  Grid,
+  Typography,
+  InputBase,
+  FormControl,
+  MenuItem,
+  SelectChangeEvent,
+} from "@mui/material";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useCallback, useEffect, useState } from "react";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
@@ -89,62 +98,13 @@ const AllStudents = () => {
   const [totalStudent, setTotalStudent] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [searchValue, setSearchValue] = useState<string>("");
-  const navigate = useNavigate();
+  const [division, setDivision] = useState<string>("");
   const classes = useStyles();
 
-  const debounce = (func: Function, delay: number) => {
-    let timeoutId: NodeJS.Timeout;
-    return (...args: any[]) => {
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => {
-        func(...args);
-      }, delay);
-    };
-  };
-  const handleSearch = async (
-    searchValue: string,
-    page: number,
-    limit: number
-  ) => {
-    try {
-      let response;
-      if (searchValue) {
-        // Retrieve the token from local storage
-        const token = localStorage.getItem("token");
-        response = await instance.get(
-          `${API_BASE_URI}?search=${searchValue}&page=${page}&limit=${limit}`,
-          {
-            headers: {
-              Authorization: token,
-            },
-          }
-        );
-      } else {
-        response = await fethStudents(searchValue, 1, limit);
-      }
-
-      if (response) {
-        const data = await response.data;
-        setStudents(data.students);
-        setCurrentPage(data.current_page);
-        setTotalPages(data.total_pages);
-        setTotalStudent(data.total_students);
-        setIsLoading(false);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const searchValue = event.target.value;
-    debouncedHandleSearch(searchValue, 1, rowsPerPage);
-    setSearchValue(searchValue);
-  };
-
-  const debouncedHandleSearch = useCallback(debounce(handleSearch, 1000), []);
+  // Fetch all student data from api
   const fethStudents = async (
     searchValue: String,
+    division: String,
     page: number,
     limit: number
   ) => {
@@ -154,7 +114,7 @@ const AllStudents = () => {
 
       // Send a GET request to the API endpoint with search parameters
       const response = await instance.get(
-        `${API_BASE_URI}?search=${searchValue}&page=${page}&limit=${limit}`,
+        `${API_BASE_URI}?search=${searchValue}&division=${division}&page=${page}&limit=${limit}`,
         {
           headers: {
             Authorization: token,
@@ -176,17 +136,76 @@ const AllStudents = () => {
   };
 
   useEffect(() => {
-    fethStudents(searchValue, 1, rowsPerPage);
+    fethStudents(searchValue, division, 1, rowsPerPage);
   }, []);
 
-  const handlePageChange = (page: number) => {
-    if (searchValue) {
-      handleSearch(searchValue, page, rowsPerPage);
-    } else {
-      fethStudents(searchValue, page, rowsPerPage);
+  //set debounce for delay search
+  const debounce = (func: Function, delay: number) => {
+    let timeoutId: NodeJS.Timeout;
+    return (...args: any[]) => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        func(...args);
+      }, delay);
+    };
+  };
+
+  // serach handle
+  const handleSearch = async (
+    searchValue: string,
+    division: String,
+    page: number,
+    limit: number
+  ) => {
+    try {
+      let response;
+      if (searchValue) {
+        // Retrieve the token from local storage
+        const token = localStorage.getItem("token");
+        response = await instance.get(
+          `${API_BASE_URI}?search=${searchValue}&division=${division}&page=${page}&limit=${limit}`,
+          {
+            headers: {
+              Authorization: token,
+            },
+          }
+        );
+      } else {
+        response = await fethStudents(searchValue, division, 1, limit);
+      }
+
+      if (response) {
+        const data = await response.data;
+        setStudents(data.students);
+        setCurrentPage(data.current_page);
+        setTotalPages(data.total_pages);
+        setTotalStudent(data.total_students);
+        setIsLoading(false);
+      }
+    } catch (error) {
+      console.error(error);
     }
   };
 
+  // set searchvalue when change value
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const searchValue = event.target.value;
+    debouncedHandleSearch(searchValue, division, 1, rowsPerPage);
+    setSearchValue(searchValue);
+  };
+
+  const debouncedHandleSearch = useCallback(debounce(handleSearch, 1000), []);
+
+  // set pagevalue when page change
+  const handlePageChange = (page: number) => {
+    if (searchValue) {
+      handleSearch(searchValue, division, page, rowsPerPage);
+    } else {
+      fethStudents(searchValue, division, page, rowsPerPage);
+    }
+  };
+
+  // set rows per page value when rows value change
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -195,12 +214,13 @@ const AllStudents = () => {
     setCurrentPage(1);
 
     if (searchValue) {
-      handleSearch(searchValue, 1, newRowsPerPage);
+      handleSearch(searchValue, division, 1, newRowsPerPage);
     } else {
-      fethStudents(searchValue, 1, newRowsPerPage);
+      fethStudents(searchValue, division, 1, newRowsPerPage);
     }
   };
 
+  // Delete student data
   const handleDeleteStudent = async (studentId: string) => {
     try {
       const token: string = localStorage.getItem("token") as string;
@@ -218,6 +238,38 @@ const AllStudents = () => {
     }
   };
 
+  // set division value
+  const handleDivisionChange = async (
+    event: React.ChangeEvent<{ value: unknown }>
+  ) => {
+    const division = event.target.value as string;
+    setDivision(division);
+    setCurrentPage(1);
+
+    try {
+      const token = localStorage.getItem("token");
+      const response = await instance.get(
+        `${API_BASE_URI}?search=${searchValue}&division=${division}&page=1&limit=${rowsPerPage}`,
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+
+      const data = response.data;
+      setStudents(data.students);
+      setCurrentPage(data.current_page);
+      setTotalPages(data.total_pages);
+      setTotalStudent(data.total_students);
+      setIsLoading(false);
+    } catch (error) {
+      console.error("Error fetching Student Data:", error);
+    }
+  };
+
+
+// enable loading when api is load
   if (isLoading) {
     return (
       <Typography variant="h4" gutterBottom align="center">
@@ -238,6 +290,26 @@ const AllStudents = () => {
         ml={6}
       >
         <Typography variant="h5">All Students :-</Typography>
+        <FormControl sx={{ m: 1, minWidth: 120 }}>
+          <InputLabel id="demo-simple-select-helper-label">Division</InputLabel>
+          <Select
+            labelId="demo-simple-select-helper-label"
+            id="demo-simple-select-helper"
+            value={division}
+            label="Division"
+            onChange={handleDivisionChange}
+            // onChange={(event: React.ChangeEvent<{ value: unknown }>) => {
+            //   const selectEvent: SelectChangeEvent = event as SelectChangeEvent;
+            //   setDivision(selectEvent.target.value);
+            // }}
+          >
+            <MenuItem value={""}>All</MenuItem>
+            <MenuItem value={"A"}>A</MenuItem>
+            <MenuItem value={"B"}>B</MenuItem>
+            <MenuItem value={"C"}>C</MenuItem>
+            <MenuItem value={"D"}>D</MenuItem>
+          </Select>
+        </FormControl>
         <Grid item xs={12} md={6} sm={5} className={classes.search}>
           <Grid item xs={8} md={12} sm={4} className={classes.searchbar}>
             <InputBase
@@ -286,6 +358,7 @@ const AllStudents = () => {
                       </TableCell>
                       <TableCell className={classes.thead}>DOB</TableCell>
                       <TableCell className={classes.thead}>Standard</TableCell>
+                      <TableCell className={classes.thead}>Division</TableCell>
                       <TableCell className={classes.thead}>Gender</TableCell>
                       <TableCell className={classes.thead}>
                         Mobile No.

@@ -12,6 +12,7 @@ const EditStudent = () => {
   const { _id } = useParams<{ _id: string }>();
   const [studentData, setStudentData] = useState<AddnewStudent>({
     studentid: "",
+    division: "",
     imgUrl: "",
     fullname: "",
     birthdate: "",
@@ -26,6 +27,7 @@ const EditStudent = () => {
   });
   const navigate = useNavigate();
 
+  // fetch studentdata from api
   useEffect(() => {
     const fetchStudentData = async () => {
       try {
@@ -36,19 +38,16 @@ const EditStudent = () => {
           },
         });
         const data = await response.data;
-        console.log(data);
-        // setStudentData(data);
-        // console.log("student data", studentData);
         setStudentData(data);
       } catch (error) {
         console.error("error");
       }
     };
-    console.log("student data", studentData);
 
     fetchStudentData();
   }, [_id]);
 
+  // Update student data
   const handleSubmit = async (values: any) => {
     const token = localStorage.getItem("token");
     const formData = new FormData();
@@ -75,7 +74,6 @@ const EditStudent = () => {
       console.error(error);
     }
   };
-
   return (
     <Grid container spacing={1} mb={5} mt={5}>
       <Grid item xs={12} md={12} sm={12} m={5} justifyContent={"center"}>

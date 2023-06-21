@@ -33,7 +33,7 @@ const validationSchema = Yup.object().shape({
     .max(10, "Phone number should be 10 digits long"),
   nationality: Yup.string().required("Nationality is required"),
   imgUrl: Yup.mixed()
-  .required("Student Image is is required")
+    .required("Student Image is is required")
     .test(
       "fileFormat",
       "Only JPG and PNG image formats are allowed",
@@ -77,6 +77,7 @@ const StudentForm: React.FC<StudentFormProps> = ({
     initialValues,
     validationSchema,
     onSubmit,
+    enableReinitialize: true,
   });
 
   return (
@@ -177,7 +178,7 @@ const StudentForm: React.FC<StudentFormProps> = ({
           />
         </Grid>
 
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={4}>
           <TextField
             fullWidth
             variant="outlined"
@@ -197,7 +198,33 @@ const StudentForm: React.FC<StudentFormProps> = ({
             }
           />
         </Grid>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={4}>
+          <TextField
+            fullWidth
+            variant="outlined"
+            size="small"
+            margin="dense"
+            label="Division"
+            name="division"
+            type="text"
+            select
+            value={formik.values.division}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            error={!!(formik.touched.division && formik.errors.division)}
+            helperText={
+              formik.touched.standard && formik.errors.division
+                ? String(formik.errors.division)
+                : ""
+            }
+          >
+            <MenuItem value="A">A</MenuItem>
+            <MenuItem value="B">B</MenuItem>
+            <MenuItem value="C">C</MenuItem>
+            <MenuItem value="D">D</MenuItem>
+          </TextField>
+        </Grid>
+        <Grid item xs={12} sm={4}>
           <TextField
             fullWidth
             variant="outlined"
