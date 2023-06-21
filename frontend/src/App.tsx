@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import { Container } from "@mui/material";
 import Helmet from "./Common/Helmet/Helmet";
 import ProtectedRoute from "./Route/ProtectedRoute";

@@ -2,9 +2,7 @@ import { Container, Grid, Typography } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { Card, CardContent, CardMedia } from "@material-ui/core";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
-
-import { useEffect, useRef, useState } from "react";
-
+import { useEffect, useState } from "react";
 import instance from "../../../Services/AxiosInterCeptors";
 import { API_BASE_URI, GET_IMAGE } from "../../../Configs/AppConfig";
 import { AllStudent } from "../../../Types/Type";
@@ -33,7 +31,6 @@ function StudentData() {
   const classes = useStyles();
   const { _id } = useParams<{ _id: string }>();
   const [data, setData] = useState<AllStudent | null>(null);
-  const reviewUser = useRef<HTMLFormElement>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {

@@ -19,14 +19,12 @@ import {
   InputBase,
   FormControl,
   MenuItem,
-  SelectChangeEvent,
 } from "@mui/material";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useCallback, useEffect, useState } from "react";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import instance from "../../Services/AxiosInterCeptors";
 import {
-  ALL_STUDENTS,
   API_BASE_URI,
   DELETE_STUDENT,
 } from "../../Configs/AppConfig";

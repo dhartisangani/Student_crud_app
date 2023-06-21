@@ -1,4 +1,4 @@
-import { Card, TableCell, TableRow } from "@material-ui/core";
+import { TableCell, TableRow } from "@material-ui/core";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import BorderColorIcon from "@mui/icons-material/BorderColor";

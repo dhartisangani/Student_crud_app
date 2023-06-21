@@ -51,8 +51,6 @@ const EditStudent = () => {
   const handleSubmit = async (values: any) => {
     const token = localStorage.getItem("token");
     const formData = new FormData();
-    console.log(values);
-
     // Append form values to the FormData object
     for (const key in values) {
       formData.append(key, values[key]);
@@ -68,7 +66,6 @@ const EditStudent = () => {
 
       const data = response.data;
       setLoading(false);
-      console.log("Submitted form:", values);
       navigate("/");
     } catch (error) {
       console.error(error);

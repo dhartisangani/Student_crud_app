@@ -4,21 +4,13 @@ import {
   Typography,
   Grid,
   Container,
-  InputBase,
   Button,
 } from "@material-ui/core";
 import { Link, useNavigate } from "react-router-dom";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
-import LocalMallOutlinedIcon from "@mui/icons-material/LocalMallOutlined";
-import DashboardIcon from "@mui/icons-material/Dashboard";
-import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
-import ViewListIcon from "@mui/icons-material/ViewList";
 import LogoutIcon from "@mui/icons-material/Logout";
 import SummarizeIcon from "@mui/icons-material/Summarize";
-import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import {
   Toolbar,
   Drawer,
