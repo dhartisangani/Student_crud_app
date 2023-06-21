@@ -109,8 +109,15 @@ const AllStudents = () => {
     try {
       let response;
       if (searchValue) {
+        // Retrieve the token from local storage
+        const token = localStorage.getItem("token");
         response = await instance.get(
-          `${API_BASE_URI}?search=${searchValue}&page=${page}&limit=${limit}`
+          `${API_BASE_URI}?search=${searchValue}&page=${page}&limit=${limit}`,
+          {
+            headers: {
+              Authorization: token,
+            },
+          }
         );
       } else {
         response = await fethStudents(searchValue, 1, limit);

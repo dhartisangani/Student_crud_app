@@ -4,8 +4,8 @@ const { ObjectId } = require('mongodb');
 const studentvalidator = require('../Validator/studentvalidator');
 
 exports.addstudent = async (req, res) => {
-    console.log(req.body)
-    console.log("-------------------------->", req.file)
+    // console.log(req.body)
+    // console.log("-------------------------->", req.file)
     try {
         const {
             studentid,
@@ -76,8 +76,8 @@ exports.getStudentByID = async (req, res) => {
 
 // Update Student data 
 exports.updateStudentwithID = async (req, res) => {
-    console.log(req.body)
-    console.log("updated image", req.file)
+    // console.log(req.body)
+    // console.log("updated image", req.file)
     const {
         studentid,
         fullname,
