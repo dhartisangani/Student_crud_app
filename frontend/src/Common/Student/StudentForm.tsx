@@ -19,15 +19,6 @@ const validationSchema = Yup.object().shape({
   fathername: Yup.string().required("Father's Name is required"),
   Fatheroccupation: Yup.string().required("Father's Occupation is required"),
   mothername: Yup.string().required("Mother's Name is required"),
-  // imgUrl: Yup.string().test(
-  //   "FILE_FORMAT",
-  //   "Only JPG and PNG image formats are allowed",
-  //   (value: any) =>
-  //     !value ||
-  //     (value &&
-  //       /\.(jpg|jpeg|png)$/i.test(value) &&
-  //       ["/jpeg", "/png"].includes(value.type))
-  // ),
   email: Yup.string()
     .email("Invalid email")
     .required("Email is required")
@@ -41,6 +32,26 @@ const validationSchema = Yup.object().shape({
     .min(10, "Phone number should be 10 digits long")
     .max(10, "Phone number should be 10 digits long"),
   nationality: Yup.string().required("Nationality is required"),
+  imgUrl: Yup.mixed()
+  .required("Student Image is is required")
+    .test(
+      "fileFormat",
+      "Only JPG and PNG image formats are allowed",
+      function (value) {
+        if (!value) {
+          // No image selected, validation passes
+          return true;
+        }
+        const allowedFormats = ["image/jpeg", "image/png"];
+        const maxFileSize = 5 * 1024 * 1024; // 5MB
+        const { type, size } = value as File;
+        if (allowedFormats.includes(type) && size <= maxFileSize) {
+          // Image format and size are valid
+          return true;
+        }
+        return false;
+      }
+    ),
 });
 
 const StudentForm: React.FC<StudentFormProps> = ({
@@ -96,7 +107,11 @@ const StudentForm: React.FC<StudentFormProps> = ({
           item
           xs={12}
           sm={6}
-          style={{ display: "flex", justifyContent: "space-around", alignItems:'center' }}
+          style={{
+            display: "flex",
+            justifyContent: "space-around",
+            alignItems: "center",
+          }}
         >
           <TextField
             name="imgUrl"

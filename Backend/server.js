@@ -20,10 +20,7 @@ app.use(bodyParser.json({ limit: '10mb' }));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 app.use(cors());
 
-// const dirname = path.resolve();
-// app.use('/images', express.static(path.join(dirname, 'images')));
-// app.use('/images', express.static(path.join(__dirname, 'images')));
-app.use(express.static(path.join(__dirname, 'images')));
+app.use('/uploads', express.static('uploads'))
 
 app.use(user, userRouter);
 app.use(student, studentRouter);

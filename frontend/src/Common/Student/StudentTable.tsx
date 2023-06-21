@@ -5,7 +5,8 @@ import BorderColorIcon from "@mui/icons-material/BorderColor";
 import DeleteIcon from "@material-ui/icons/Delete";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { CardMedia } from "@mui/material";
-import img from '../../../../Backend/images/image-imgUrl-1687258057656.jpeg'
+import { GET_IMAGE } from "../../Configs/AppConfig";
+// const serverImageUrl = "../../asset/images/";
 export interface AllStudentList {
   item: {
     _id: string;
@@ -28,7 +29,6 @@ export interface AllStudentList {
 const StudentTable: React.FC<AllStudentList> = ({ item, srNo, onDelete }) => {
   const navigate = useNavigate();
   const _id = item._id;
-
   return (
     <>
       <TableRow>
@@ -37,7 +37,7 @@ const StudentTable: React.FC<AllStudentList> = ({ item, srNo, onDelete }) => {
         <TableCell>
           <CardMedia
             component="img"
-            image={`./images${item.imgUrl}`}
+            src={`${GET_IMAGE}${item.imgUrl}`}
             sx={{
               backgroundSize: "contain",
               objectFit: "contain",
@@ -45,15 +45,7 @@ const StudentTable: React.FC<AllStudentList> = ({ item, srNo, onDelete }) => {
               width: "50px",
             }}
           />
-          {/* <img
-            style={{ width: "100px", textAlign: "center", margin: "auto" }}
-            src={`${window.location.origin}/images/${item.imgUrl}`}
-            className="mt-2"
-            alt="Student Image"
-          /> */}
         </TableCell>
-
-        <TableCell>{item.imgUrl}</TableCell>
         <TableCell>{item.fullname}</TableCell>
         <TableCell>{item.birthdate}</TableCell>
         <TableCell>{item.standard}</TableCell>

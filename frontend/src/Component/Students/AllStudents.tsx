@@ -18,7 +18,7 @@ import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import instance from "../../Services/AxiosInterCeptors";
 import {
   ALL_STUDENTS,
-  API_BASE_URL,
+  API_BASE_URI,
   DELETE_STUDENT,
 } from "../../Configs/AppConfig";
 import { AllStudent } from "../../Types/Type";
@@ -110,7 +110,7 @@ const AllStudents = () => {
       let response;
       if (searchValue) {
         response = await instance.get(
-          `${API_BASE_URL}?search=${searchValue}&page=${page}&limit=${limit}`
+          `${API_BASE_URI}?search=${searchValue}&page=${page}&limit=${limit}`
         );
       } else {
         response = await fethStudents(searchValue, 1, limit);
@@ -147,7 +147,7 @@ const AllStudents = () => {
 
       // Send a GET request to the API endpoint with search parameters
       const response = await instance.get(
-        `${API_BASE_URL}?search=${searchValue}&page=${page}&limit=${limit}`,
+        `${API_BASE_URI}?search=${searchValue}&page=${page}&limit=${limit}`,
         {
           headers: {
             Authorization: token,

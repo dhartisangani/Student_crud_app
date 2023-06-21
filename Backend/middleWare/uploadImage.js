@@ -3,8 +3,7 @@ const path = require('path');
 
 const multerStorage = multer.diskStorage({
     destination: (req, file, cb) => {
-        const uploadPath = path.join(__dirname, '../images');
-        // fs.mkdirSync(uploadPath, { recursive: true });
+        const uploadPath = path.join(__dirname, '../images/');
         cb(null, uploadPath);
     },
     filename: (req, file, cb) => {
@@ -13,7 +12,9 @@ const multerStorage = multer.diskStorage({
     },
 });
 
-const upload = multer({ storage: multerStorage });
+// const upload = multer({ storage: multerStorage });
+
+const upload = multer({ dest: 'uploads/' })
 
 const uploadImage = upload.single('imgUrl');
 

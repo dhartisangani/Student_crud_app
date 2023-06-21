@@ -5,7 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { AddnewStudent } from "../../Types/Type";
 import StudentForm from "../../Common/Student/StudentForm";
 import instance from "../../Services/AxiosInterCeptors";
-import { API_BASE_URL, UPDATE_STUDENT } from "../../Configs/AppConfig";
+import { API_BASE_URI, UPDATE_STUDENT } from "../../Configs/AppConfig";
 
 const EditStudent = () => {
   const [loading, setLoading] = useState(false);
@@ -30,7 +30,7 @@ const EditStudent = () => {
     const fetchStudentData = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await instance.get(`${API_BASE_URL}/${_id}`, {
+        const response = await instance.get(`${API_BASE_URI}/${_id}`, {
           headers: {
             Authorization: token,
           },
@@ -39,20 +39,7 @@ const EditStudent = () => {
         console.log(data);
         // setStudentData(data);
         // console.log("student data", studentData);
-        setStudentData({
-          studentid: data.studentid,
-          imgUrl: data.imgUrl,
-          fullname: data.fullname,
-          birthdate: data.birthdate,
-          gender: data.gender,
-          standard: data.standard,
-          fathername: data.fathername,
-          Fatheroccupation: data.Fatheroccupation,
-          mothername: data.mothername,
-          email: data.email,
-          phone: data.phone,
-          nationality: data.nationality,
-        });
+        setStudentData(data);
       } catch (error) {
         console.error("error");
       }

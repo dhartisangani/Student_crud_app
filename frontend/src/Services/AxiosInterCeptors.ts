@@ -1,12 +1,12 @@
 import axios from "axios";
-import { API_BASE_URL } from "../Configs/AppConfig";
+import { API_BASE_URI } from "../Configs/AppConfig";
 
-axios.defaults.baseURL = API_BASE_URL;
+axios.defaults.baseURL = API_BASE_URI;
 export const axiosPublic = axios.create();
 export const axiosAuth = axios.create();
 
 const instance = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL: API_BASE_URI,
 });
 instance.interceptors.response.use(
   (response: any) => response,
@@ -14,7 +14,7 @@ instance.interceptors.response.use(
 );
 
 instance.defaults.headers.common["Authorization"] = "Auth Token";
-axios.defaults.baseURL = API_BASE_URL;
+axios.defaults.baseURL = API_BASE_URI;
 
 const onResponseRejected = (error: any, handle401: (error: any) => void) => {
   console.warn(error);

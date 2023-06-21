@@ -32,12 +32,12 @@ module.exports = function studentValidator(data) {
     if (!data.imgUrl) {
         errors.imgUrl = "Image file is required";
     } else {
-        const allowedExtensions = [".jpg", ".jpeg", ".png"];
-        const extension = data.imgUrl.slice(data.imgUrl.lastIndexOf(".")).toLowerCase();
+        // const allowedExtensions = [".jpg", ".jpeg", ".png"];
+        // const extension = data.imgUrl.slice(data.imgUrl.lastIndexOf(".")).toLowerCase();
 
-        if (!allowedExtensions.includes(extension)) {
-            errors.imgUrl = "Only JPG and PNG image formats are allowed";
-        }
+        // if (!allowedExtensions.includes(extension)) {
+        //     errors.imgUrl = "Only JPG and PNG image formats are allowed";
+        // }
 
         const maxSizeInBytes = 5 * 1024 * 1024; // 5MB
         const imgSizeInBytes = data.imgUrl.size;

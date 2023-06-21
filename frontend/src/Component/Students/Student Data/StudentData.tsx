@@ -1,13 +1,12 @@
 import { Container, Grid, Typography } from "@mui/material";
 import { useParams } from "react-router-dom";
-import { Card, CardMedia } from "@material-ui/core";
+import { Card, CardContent, CardMedia } from "@material-ui/core";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 
 import { useEffect, useRef, useState } from "react";
 
 import instance from "../../../Services/AxiosInterCeptors";
-import { API_BASE_URL } from "../../../Configs/AppConfig";
-import { AllStudentList } from "../../../Common/Student/StudentTable";
+import { API_BASE_URI, GET_IMAGE } from "../../../Configs/AppConfig";
 import { AllStudent } from "../../../Types/Type";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -15,6 +14,8 @@ const useStyles = makeStyles((theme: Theme) =>
     root: {
       minHeight: "10vh",
       alignItems: "left",
+      display: "flex",
+      justifyContent: "center",
     },
     imgGrid: {
       display: "flex",
@@ -23,29 +24,6 @@ const useStyles = makeStyles((theme: Theme) =>
       backgroundSize: "contain",
       [theme.breakpoints.down("lg")]: {
         minHeight: "50vh",
-      },
-    },
-    image: {
-      position: "relative",
-      top: "5%",
-      objectFit: "contain",
-      height: "100%",
-      fontWeight: "bold",
-      backgroundSize: "contain",
-      width: "30%",
-      [theme.breakpoints.down("lg")]: {
-        height: "100%",
-        width: "100%",
-      },
-    },
-    form: {
-      display: "flex",
-      flexDirection: "column",
-      width: "80%",
-      padding: theme.spacing(3),
-      [theme.breakpoints.down("lg")]: {
-        width: "100%",
-        margin: "auto",
       },
     },
   })
@@ -67,7 +45,7 @@ function StudentData() {
       const token = localStorage.getItem("token");
 
       try {
-        const response = await instance.get(`${API_BASE_URL}/${_id}`, {
+        const response = await instance.get(`${API_BASE_URI}/${_id}`, {
           headers: {
             Authorization: token,
           },
@@ -95,62 +73,64 @@ function StudentData() {
   return (
     <Container
       style={{
-        marginTop: "10%",
+        marginTop: "5%",
+        width: "45%",
       }}
     >
       <Typography variant="h4" gutterBottom align="center">
         Student Detail
       </Typography>
       {data && (
-        <Grid container spacing={1} mb={5} className={classes.root}>
-          
-          <Card
-            style={{
-              width: "50%",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <Grid item xs={10} md={5} sm={4} mt={7} className={classes.imgGrid}>
-              <img
-                style={{ width: "100px", textAlign: "center", margin: "auto" }}
-                src={`/images/${data.imgUrl}`}
+        <Card>
+          <Grid container>
+            <Grid item xs={12} md={4} sm={4} className={classes.imgGrid}>
+              <CardMedia
+                component="img"
                 alt="Student Image"
-                className="mt-2"
+                image={`${GET_IMAGE}${data.imgUrl}`}
+                style={{
+                  backgroundSize: "contain",
+                  objectFit: "contain",
+                  height: "150px",
+                  width: "150px",
+                }}
               />
             </Grid>
-            <Grid item xs={10} md={5} sm={5} mt={5}>
-              <Typography component="p" mb={1} fontWeight="bold">
-                FullName:- {data.fullname}
-              </Typography>
-              <Typography
-                variant="h4"
-                alignItems="center"
-                flexDirection="row"
-                display="flex"
-              >
-                <Typography variant="body1">
-                  Date of Birth:- {data.birthdate}
+            <Grid item xs={12} md={8} sm={8}>
+              <CardContent>
+                <Typography component="p" variant="h5" fontWeight="bold">
+                  FullName: {data.fullname}
                 </Typography>
-              </Typography>
-              <Typography component="p">Gender:- {data.gender}</Typography>
-              <Typography component="p">
-                Admission Standard:
-                <span style={{ fontWeight: "bold" }}>{data.standard}</span>
-              </Typography>
-              <Typography variant="body1">
-                Father's Name:- {data.fathername}
-              </Typography>
-              <Typography variant="body1">
-                Mother's Name:- {data.mothername}
-              </Typography>
-              <Typography variant="body1">
-                Contact No:- {data.phone.toString()}
-              </Typography>
+                <Typography component="p" variant="body1">
+                  Standard:
+                  <span style={{ fontWeight: "bold" }}>{data.standard}</span>
+                </Typography>
+                <Typography component="p" variant="body1">
+                  Date of Birth: {data.birthdate}
+                </Typography>
+                <Typography component="p" variant="body1">
+                  Gender: {data.gender}
+                </Typography>
+
+                <Typography component="p" variant="body1">
+                  Father's Name: {data.fathername}
+                </Typography>
+                <Typography component="p" variant="body1">
+                  Mother's Name: {data.mothername}
+                </Typography>
+                <Typography component="p" variant="body1">
+                  Father's Occupation: {data.Fatheroccupation}
+                </Typography>
+                <Typography component="p" variant="body1">
+                  Contact No: {data.phone.toString()}
+                </Typography>
+                <Typography component="p" variant="body1">
+                  Nationality : {data.nationality}
+                </Typography>
+              </CardContent>
             </Grid>
-          </Card>
-        </Grid>
+          </Grid>
+        </Card>
       )}
     </Container>
   );

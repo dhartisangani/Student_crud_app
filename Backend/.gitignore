@@ -3,5 +3,5 @@
 .env.development.local
 .env.test.local
 .env.production.local
-/images
+/uploads
 /httpError
