@@ -48,6 +48,51 @@ const EditStudent = () => {
   }, [_id]);
 
   // Update student data
+  // const handleSubmit = async (values: any) => {
+  //   const token = localStorage.getItem("token");
+  //   const formData = { ...values };
+
+  //   try {
+  //     // Convert the selected image file to base64
+  //     const base64Image = await convertImageToBase64(values.imgUrl);
+  //     formData.imgUrl = base64Image;
+
+  //     const response = await axios.put(`${UPDATE_STUDENT}${_id}`, formData, {
+  //       headers: {
+  //         Authorization: token,
+  //         "Content-Type": "application/json",
+  //       },
+  //     });
+
+  //     const data = response.data;
+  //     console.log(data)
+  //     setLoading(false);
+  //     navigate("/");
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
+
+  // const convertImageToBase64 = (file: File): Promise<string> => {
+  //   return new Promise((resolve, reject) => {
+  //     const reader = new FileReader();
+
+  //     reader.onload = () => {
+  //       const base64Image = reader.result?.toString()?.split(",")[1];
+  //       if (base64Image) {
+  //         resolve(base64Image);
+  //       } else {
+  //         reject(new Error("Failed to convert image to base64."));
+  //       }
+  //     };
+
+  //     reader.onerror = (error) => {
+  //       reject(error);
+  //     };
+
+  //     reader.readAsDataURL(file);
+  //   });
+  // };
   const handleSubmit = async (values: any) => {
     const token = localStorage.getItem("token");
     const formData = new FormData();

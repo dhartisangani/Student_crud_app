@@ -24,10 +24,7 @@ import { Link } from "react-router-dom";
 import { useCallback, useEffect, useState } from "react";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import instance from "../../Services/AxiosInterCeptors";
-import {
-  API_BASE_URI,
-  DELETE_STUDENT,
-} from "../../Configs/AppConfig";
+import { API_BASE_URI, DELETE_STUDENT } from "../../Configs/AppConfig";
 import { AllStudent } from "../../Types/Type";
 import StudentTable from "../../Common/Student/StudentTable";
 
@@ -266,8 +263,7 @@ const AllStudents = () => {
     }
   };
 
-
-// enable loading when api is load
+  // enable loading when api is load
   if (isLoading) {
     return (
       <Typography variant="h4" gutterBottom align="center">
@@ -295,6 +291,7 @@ const AllStudents = () => {
             id="demo-simple-select-helper"
             value={division}
             label="Division"
+            name="division"
             onChange={handleDivisionChange}
             // onChange={(event: React.ChangeEvent<{ value: unknown }>) => {
             //   const selectEvent: SelectChangeEvent = event as SelectChangeEvent;
@@ -313,6 +310,7 @@ const AllStudents = () => {
             <InputBase
               fullWidth
               placeholder="Search hear.."
+              name="serach"
               inputProps={{ "aria-label": "search google maps" }}
               autoComplete="off"
               className={classes.searchInput}

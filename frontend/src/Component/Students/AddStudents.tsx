@@ -3,12 +3,59 @@ import { Grid, Typography } from "@mui/material";
 import axios from "axios";
 import StudentForm from "../../Common/Student/StudentForm";
 import { useNavigate } from "react-router-dom";
+import { ADD_STUDENT } from "../../Configs/AppConfig";
 
 const AddStudent = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   // Add new student data
+  // const handleSubmit = async (values: any) => {
+  //   const token = localStorage.getItem("token");
+  //   const formData = { ...values };
+
+  //   try {
+  //     // Convert the selected image file to base64
+  //     const base64Image = await convertImageToBase64(values.imgUrl);
+  //     formData.imgUrl = base64Image;
+
+  //     const response = await axios.post(ADD_STUDENT, formData, {
+  //       headers: {
+  //         Authorization: token,
+  //         "Content-Type": "application/json",
+  //       },
+  //     });
+
+  //     const data = response.data;
+  //     console.log("Submitted form:", data);
+  //     setLoading(false);
+  //     navigate("/");
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
+
+  // const convertImageToBase64 = (file: File): Promise<string> => {
+  //   return new Promise((resolve, reject) => {
+  //     const reader = new FileReader();
+
+  //     reader.onload = () => {
+  //       const base64Image = reader.result?.toString()?.split(",")[1];
+  //       if (base64Image) {
+  //         resolve(base64Image);
+  //       } else {
+  //         reject(new Error("Failed to convert image to base64."));
+  //       }
+  //     };
+
+  //     reader.onerror = (error) => {
+  //       reject(error);
+  //     };
+
+  //     reader.readAsDataURL(file);
+  //   });
+  // };
+
   const handleSubmit = async (values: any) => {
     const token = localStorage.getItem("token");
     const formData = new FormData();
@@ -21,7 +68,7 @@ const AddStudent = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:8080/api/v1/school/student/add",
+       ADD_STUDENT,
         formData,
         {
           headers: {

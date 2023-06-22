@@ -38,7 +38,9 @@ const StudentTable: React.FC<AllStudentList> = ({ item, srNo, onDelete }) => {
         <TableCell>
           <CardMedia
             component="img"
-            src={`${GET_IMAGE}${item.imgUrl}`}
+            src={`${GET_IMAGE}${item.imgUrl}`}  // for getting image file with uploads
+            // src={`data:image/jpg;base64,${item.imgUrl}`} // for display base 64 image
+            // image={item.imgUrl.toString()}
             sx={{
               backgroundSize: "contain",
               objectFit: "contain",

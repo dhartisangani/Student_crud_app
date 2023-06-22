@@ -84,7 +84,8 @@ function StudentData() {
               <CardMedia
                 component="img"
                 alt="Student Image"
-                image={`${GET_IMAGE}${data.imgUrl}`}
+                image={`${GET_IMAGE}${data.imgUrl}`}      // for getting image file with uploads
+                // src={`data:image/jpg;base64,${data.imgUrl}`} // for display base 64 image
                 style={{
                   backgroundSize: "contain",
                   objectFit: "contain",

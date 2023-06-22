@@ -5,11 +5,12 @@ const studentvalidator = require('../Validator/studentvalidator');
 
 // add student function
 exports.addstudent = async (req, res) => {
-    // console.log(req.body)
-    console.log("-------------------------->", req.file)
+    console.log(req.body)
+    // console.log("-------------------------->", req.file)
     try {
         const {
             studentid,
+            // imgUrl,
             fullname,
             birthdate,
             gender,
@@ -30,6 +31,7 @@ exports.addstudent = async (req, res) => {
 
         const studentData = {
             imgUrl: req.file.filename,
+            // imgUrl,
             studentid,
             fullname,
             birthdate,
@@ -99,6 +101,7 @@ exports.updateStudentwithID = async (req, res) => {
     // console.log("updated image", req.file)
     const {
         studentid,
+        // imgUrl,
         fullname,
         birthdate,
         gender,
