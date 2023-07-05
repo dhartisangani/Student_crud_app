@@ -1,5 +1,6 @@
 import axios from "axios";
 import { API_BASE_URI } from "../Configs/AppConfig";
+import { refreshtoken } from "./EventTemplateServices";
 
 axios.defaults.baseURL = API_BASE_URI;
 export const axiosPublic = axios.create();
@@ -24,8 +25,11 @@ const onResponseRejected = (error: any, handle401: (error: any) => void) => {
     if (response.status === 401) {
       handle401(error);
     } else if (response.status === 402) {
-      localStorage.removeItem("token");
-      localStorage.removeItem("tokenExpiration");
+      refreshtoken();
+      // return refreshtoken().then(() => {
+      //   // Refresh token completed successfully, retry the original request
+      //   return instance(error.config);
+      // });
     } else if (response.status === 404) {
       message = "Not Found";
     } else if (response.status === 500) {

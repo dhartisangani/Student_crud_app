@@ -59,6 +59,7 @@ const Login = () => {
           setLoading(false);
           console.log("Submitted form:", values);
           localStorage.setItem("token", data.authtoken);
+          localStorage.setItem("refreshToken", data.refreshToken);
           localStorage.setItem("tokenExpiration", data.expirationTime);
           navigate("/");
         } else {
@@ -79,7 +80,7 @@ const Login = () => {
       container
       justifyContent="center"
       alignItems="center"
-      minHeight="100vh"
+      minHeight="80vh"
     >
       <Grid item xs={10} sm={8} md={6} lg={4} xl={3}>
         {loading ? (

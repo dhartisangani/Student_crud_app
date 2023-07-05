@@ -8,9 +8,11 @@ dotenv.config()
 
 const userRouter = require("./routes/user")
 const studentRouter = require("./routes/students")
+const refreshToken = require("./routes/refreshtoken")
 const connect_port = process.env.PORT
 const user = process.env.BASE_URI_USER
 const student = process.env.BASE_URI_STUDENT
+const token = process.env.BASE_URI_REFRESHTOKEN
 connectToMongo();
 
 const app = express();
@@ -24,6 +26,7 @@ app.use('/uploads', express.static('uploads'))
 
 app.use(user, userRouter);
 app.use(student, studentRouter);
+app.use(token, refreshToken);
 
 app.listen(port, () => {
     console.log(`listining on http://localhost:${port}`);

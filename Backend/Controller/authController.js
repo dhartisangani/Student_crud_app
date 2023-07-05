@@ -6,6 +6,7 @@ const loginValidator = require("../Validator/loginValidator");
 const dotenv = require("dotenv")
 dotenv.config()
 const JWT_SECRET = process.env.JWT_SECRET_TOKEN
+const REFRESH_TOKEN = process.env.JWT_SECRET_REFRESH
 
 // create user function 
 exports.signup = async (req, res) => {
@@ -42,9 +43,10 @@ exports.signup = async (req, res) => {
 
         const expirationTime = 4 * 60 * 60; // 4 hours in seconds
         const authtoken = jwt.sign(data, JWT_SECRET, { expiresIn: expirationTime });
+        const refreshToken = jwt.sign(data, REFRESH_TOKEN, { expiresIn: '1d' });
 
         success = true;
-        res.json({ success, data, authtoken });
+        res.json({ success, data, authtoken, refreshToken });
 
     } catch (error) {
         console.error(error.message);
@@ -79,8 +81,11 @@ exports.login = async (req, res, next) => {
         }
         const expirationTime = 4 * 60 * 60; // 4 hours in seconds
         const authtoken = jwt.sign(data, JWT_SECRET, { expiresIn: expirationTime });
-        let success = true
-        res.json({ success, data, authtoken, expirationTime })
+        const refreshToken = jwt.sign(data, JWT_SECRET);
+
+        success = true;
+        res.json({ success, data, authtoken, refreshToken, expirationTime });
+
     } catch (error) {
         console.error(error.message)
         res.status(500).send("Internal server Error...")

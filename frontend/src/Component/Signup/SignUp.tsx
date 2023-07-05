@@ -90,7 +90,7 @@ const Signup = () => {
       container
       justifyContent="center"
       alignItems="center"
-      minHeight="100vh"
+      minHeight="80vh"
     >
       <Grid item xs={10} sm={8} md={6} lg={4} xl={3}>
         {loading ? (
