@@ -17,7 +17,10 @@ instance.interceptors.response.use(
 instance.defaults.headers.common["Authorization"] = "Auth Token";
 axios.defaults.baseURL = API_BASE_URI;
 
-const onResponseRejected = (error: any, handle401: (error: any) => void) => {
+const onResponseRejected = async (
+  error: any,
+  handle401: (error: any) => void
+) => {
   console.warn(error);
   let message = "";
   if (error && error.response) {
@@ -25,11 +28,16 @@ const onResponseRejected = (error: any, handle401: (error: any) => void) => {
     if (response.status === 401) {
       handle401(error);
     } else if (response.status === 402) {
-      refreshtoken();
-      // return refreshtoken().then(() => {
-      //   // Refresh token completed successfully, retry the original request
-      //   return instance(error.config);
-      // });
+      try {
+        await refreshtoken(); // Wait for the refresh token API call to complete
+        const originalRequest = error.config;
+        originalRequest.headers.Authorization = localStorage.getItem("token");
+
+        // Retry the original API call with updated token
+        return axios(originalRequest);
+      } catch (refreshError) {
+        // Handle refresh token API error
+      }
     } else if (response.status === 404) {
       message = "Not Found";
     } else if (response.status === 500) {

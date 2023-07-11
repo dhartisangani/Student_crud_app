@@ -17,7 +17,7 @@ exports.RefreshToken = async (req, res) => {
         const { user } = data;
 
         // Generate a new authentication token
-        const expirationTime = 60; // 4 hours in seconds
+        const expirationTime = 4 * 60 * 60; // 4 hours in seconds
         const newToken = jwt.sign({ user }, JWT_SECRET, { expiresIn: expirationTime });
 
         res.json({ authtoken: newToken, expirationTime });
